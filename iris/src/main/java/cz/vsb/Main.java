@@ -1,7 +1,5 @@
 package cz.vsb;
 
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.*;
@@ -11,10 +9,10 @@ import org.knowm.xchart.style.markers.SeriesMarkers;
 
 import java.awt.*;
 import java.io.*;
+import java.text.DecimalFormat;
 import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 //public class Main implements ExampleChart<XYChart> {
 public class Main {
@@ -177,10 +175,10 @@ public class Main {
 
         System.out.println("total var of petal:" + calcTotalVariance(petalPointsWithEuclidanNorm, petalAvgPoint));
 
-        HashMap<Double,Double> petalX = calcFrequencyOfListX(petalPointsWithEuclidanNorm);
-        HashMap<Double,Double> petalY = calcFrequencyOfListY(petalPointsWithEuclidanNorm);
-        HashMap<Double,Double> sepalX = calcFrequencyOfListX(sepalPointsWithEuclidanNorm);
-        HashMap<Double,Double> sepalY = calcFrequencyOfListY(sepalPointsWithEuclidanNorm);
+        HashMap<Double, Double> petalX = calcFrequencyOfListX(petalPointsWithEuclidanNorm);
+        HashMap<Double, Double> petalY = calcFrequencyOfListY(petalPointsWithEuclidanNorm);
+        HashMap<Double, Double> sepalX = calcFrequencyOfListX(sepalPointsWithEuclidanNorm);
+        HashMap<Double, Double> sepalY = calcFrequencyOfListY(sepalPointsWithEuclidanNorm);
         System.out.println();
         System.out.println(petalX);
         System.out.println(petalY);
@@ -192,47 +190,47 @@ public class Main {
         System.out.println("AVG of petal " + petalAvgPoint);
         System.out.println();
 
-        System.out.println("TOTAL VAR of sepal_X " + calcTotalVarianceForOneAttributeX(sepalPointsWithEuclidanNorm,sepalAvgPoint));
-        System.out.println("TOTAL VAR of sepal_Y " + calcTotalVarianceForOneAttributeY(sepalPointsWithEuclidanNorm,sepalAvgPoint));
-        System.out.println("TOTAL VAR of petal_X " + calcTotalVarianceForOneAttributeX(petalPointsWithEuclidanNorm,petalAvgPoint));
-        System.out.println("TOTAL VAR of petal_Y " + calcTotalVarianceForOneAttributeY(petalPointsWithEuclidanNorm,petalAvgPoint));
+        System.out.println("TOTAL VAR of sepal_X " + calcTotalVarianceForOneAttributeX(sepalPointsWithEuclidanNorm, sepalAvgPoint));
+        System.out.println("TOTAL VAR of sepal_Y " + calcTotalVarianceForOneAttributeY(sepalPointsWithEuclidanNorm, sepalAvgPoint));
+        System.out.println("TOTAL VAR of petal_X " + calcTotalVarianceForOneAttributeX(petalPointsWithEuclidanNorm, petalAvgPoint));
+        System.out.println("TOTAL VAR of petal_Y " + calcTotalVarianceForOneAttributeY(petalPointsWithEuclidanNorm, petalAvgPoint));
         System.out.println();
 
-        System.out.println("Standard deviation of sepal_X " + Math.sqrt(calcTotalVarianceForOneAttributeX(sepalPointsWithEuclidanNorm,sepalAvgPoint)));
-        System.out.println("Standard deviation of sepal_Y " + Math.sqrt(calcTotalVarianceForOneAttributeY(sepalPointsWithEuclidanNorm,sepalAvgPoint)));
-        System.out.println("Standard deviation of petal_X " + Math.sqrt(calcTotalVarianceForOneAttributeX(petalPointsWithEuclidanNorm,petalAvgPoint)));
-        System.out.println("Standard deviation of petal_Y " + Math.sqrt(calcTotalVarianceForOneAttributeY(petalPointsWithEuclidanNorm,petalAvgPoint)));
+        System.out.println("Standard deviation of sepal_X " + Math.sqrt(calcTotalVarianceForOneAttributeX(sepalPointsWithEuclidanNorm, sepalAvgPoint)));
+        System.out.println("Standard deviation of sepal_Y " + Math.sqrt(calcTotalVarianceForOneAttributeY(sepalPointsWithEuclidanNorm, sepalAvgPoint)));
+        System.out.println("Standard deviation of petal_X " + Math.sqrt(calcTotalVarianceForOneAttributeX(petalPointsWithEuclidanNorm, petalAvgPoint)));
+        System.out.println("Standard deviation of petal_Y " + Math.sqrt(calcTotalVarianceForOneAttributeY(petalPointsWithEuclidanNorm, petalAvgPoint)));
         System.out.println();
-        System.out.println("median of SEPAL_X: " +findMedianForX(sepalPointsWithEuclidanNorm,sepalPointsWithEuclidanNorm.size()));
-        System.out.println("median of SEPAL_Y: " +findMedianForY(sepalPointsWithEuclidanNorm,sepalPointsWithEuclidanNorm.size()));
-        System.out.println("median of PETAL_X: " +findMedianForX(petalPointsWithEuclidanNorm,petalPointsWithEuclidanNorm.size()));
-        System.out.println("median of PETAL_Y: " +findMedianForY(petalPointsWithEuclidanNorm,petalPointsWithEuclidanNorm.size()));
+        System.out.println("median of SEPAL_X: " + findMedianForX(sepalPointsWithEuclidanNorm, sepalPointsWithEuclidanNorm.size()));
+        System.out.println("median of SEPAL_Y: " + findMedianForY(sepalPointsWithEuclidanNorm, sepalPointsWithEuclidanNorm.size()));
+        System.out.println("median of PETAL_X: " + findMedianForX(petalPointsWithEuclidanNorm, petalPointsWithEuclidanNorm.size()));
+        System.out.println("median of PETAL_Y: " + findMedianForY(petalPointsWithEuclidanNorm, petalPointsWithEuclidanNorm.size()));
         System.out.println();
-        System.out.println("⟨μ−σ,μ+σ⟩ of SEPAL_X: " +(sepalAvgPoint.getxPoint() - Math.sqrt(calcTotalVarianceForOneAttributeX(sepalPointsWithEuclidanNorm,sepalAvgPoint))) +" μ+σ => "+ (sepalAvgPoint.getxPoint() + Math.sqrt(calcTotalVarianceForOneAttributeX(sepalPointsWithEuclidanNorm,sepalAvgPoint))));
-        System.out.println("⟨μ−σ,μ+σ⟩ of SEPAL_Y: " +(sepalAvgPoint.getyPoint() - Math.sqrt(calcTotalVarianceForOneAttributeY(sepalPointsWithEuclidanNorm,sepalAvgPoint))) +" μ+σ => "+ (sepalAvgPoint.getyPoint() + Math.sqrt(calcTotalVarianceForOneAttributeY(sepalPointsWithEuclidanNorm,sepalAvgPoint))));
-        System.out.println("⟨μ−σ,μ+σ⟩ of PETAL_X: " + (petalAvgPoint.getxPoint() -  Math.sqrt(calcTotalVarianceForOneAttributeX(petalPointsWithEuclidanNorm,petalAvgPoint))) + " μ+σ => "  + (petalAvgPoint.getxPoint()+ Math.sqrt(calcTotalVarianceForOneAttributeX(petalPointsWithEuclidanNorm,petalAvgPoint))));
-        System.out.println("⟨μ−σ,μ+σ⟩ of PETAL_Y: " +(petalAvgPoint.getyPoint() -  Math.sqrt(calcTotalVarianceForOneAttributeY(petalPointsWithEuclidanNorm,petalAvgPoint))) + " μ+σ => "  + (petalAvgPoint.getyPoint()+ Math.sqrt(calcTotalVarianceForOneAttributeY(petalPointsWithEuclidanNorm,petalAvgPoint))));
+        System.out.println("⟨μ−σ,μ+σ⟩ of SEPAL_X: " + (sepalAvgPoint.getxPoint() - Math.sqrt(calcTotalVarianceForOneAttributeX(sepalPointsWithEuclidanNorm, sepalAvgPoint))) + " μ+σ => " + (sepalAvgPoint.getxPoint() + Math.sqrt(calcTotalVarianceForOneAttributeX(sepalPointsWithEuclidanNorm, sepalAvgPoint))));
+        System.out.println("⟨μ−σ,μ+σ⟩ of SEPAL_Y: " + (sepalAvgPoint.getyPoint() - Math.sqrt(calcTotalVarianceForOneAttributeY(sepalPointsWithEuclidanNorm, sepalAvgPoint))) + " μ+σ => " + (sepalAvgPoint.getyPoint() + Math.sqrt(calcTotalVarianceForOneAttributeY(sepalPointsWithEuclidanNorm, sepalAvgPoint))));
+        System.out.println("⟨μ−σ,μ+σ⟩ of PETAL_X: " + (petalAvgPoint.getxPoint() - Math.sqrt(calcTotalVarianceForOneAttributeX(petalPointsWithEuclidanNorm, petalAvgPoint))) + " μ+σ => " + (petalAvgPoint.getxPoint() + Math.sqrt(calcTotalVarianceForOneAttributeX(petalPointsWithEuclidanNorm, petalAvgPoint))));
+        System.out.println("⟨μ−σ,μ+σ⟩ of PETAL_Y: " + (petalAvgPoint.getyPoint() - Math.sqrt(calcTotalVarianceForOneAttributeY(petalPointsWithEuclidanNorm, petalAvgPoint))) + " μ+σ => " + (petalAvgPoint.getyPoint() + Math.sqrt(calcTotalVarianceForOneAttributeY(petalPointsWithEuclidanNorm, petalAvgPoint))));
         System.out.println();
-        System.out.println("⟨μ−2σ,μ+2σ⟩ of SEPAL_X: " +(sepalAvgPoint.getxPoint() - 2*Math.sqrt(calcTotalVarianceForOneAttributeX(sepalPointsWithEuclidanNorm,sepalAvgPoint))) +" μ+2σ => "+ (sepalAvgPoint.getxPoint() + 2*Math.sqrt(calcTotalVarianceForOneAttributeX(sepalPointsWithEuclidanNorm,sepalAvgPoint))));
-        System.out.println("⟨μ−2σ,μ+2σ⟩ of SEPAL_Y: " +(sepalAvgPoint.getyPoint() - 2*Math.sqrt(calcTotalVarianceForOneAttributeY(sepalPointsWithEuclidanNorm,sepalAvgPoint))) +" μ+2σ => "+ (sepalAvgPoint.getyPoint() + 2*Math.sqrt(calcTotalVarianceForOneAttributeY(sepalPointsWithEuclidanNorm,sepalAvgPoint))));
-        System.out.println("⟨μ−2σ,μ+2σ⟩ of PETAL_X: " + (petalAvgPoint.getxPoint() -  2*Math.sqrt(calcTotalVarianceForOneAttributeX(petalPointsWithEuclidanNorm,petalAvgPoint))) + " μ+2σ => "  + (petalAvgPoint.getxPoint()+ 2*Math.sqrt(calcTotalVarianceForOneAttributeX(petalPointsWithEuclidanNorm,petalAvgPoint))));
-        System.out.println("⟨μ−2σ,μ+2σ⟩ of PETAL_Y: " +(petalAvgPoint.getyPoint() -  2*Math.sqrt(calcTotalVarianceForOneAttributeY(petalPointsWithEuclidanNorm,petalAvgPoint))) + " μ+2σ => "  + (petalAvgPoint.getyPoint()+ 2*Math.sqrt(calcTotalVarianceForOneAttributeY(petalPointsWithEuclidanNorm,petalAvgPoint))));
+        System.out.println("⟨μ−2σ,μ+2σ⟩ of SEPAL_X: " + (sepalAvgPoint.getxPoint() - 2 * Math.sqrt(calcTotalVarianceForOneAttributeX(sepalPointsWithEuclidanNorm, sepalAvgPoint))) + " μ+2σ => " + (sepalAvgPoint.getxPoint() + 2 * Math.sqrt(calcTotalVarianceForOneAttributeX(sepalPointsWithEuclidanNorm, sepalAvgPoint))));
+        System.out.println("⟨μ−2σ,μ+2σ⟩ of SEPAL_Y: " + (sepalAvgPoint.getyPoint() - 2 * Math.sqrt(calcTotalVarianceForOneAttributeY(sepalPointsWithEuclidanNorm, sepalAvgPoint))) + " μ+2σ => " + (sepalAvgPoint.getyPoint() + 2 * Math.sqrt(calcTotalVarianceForOneAttributeY(sepalPointsWithEuclidanNorm, sepalAvgPoint))));
+        System.out.println("⟨μ−2σ,μ+2σ⟩ of PETAL_X: " + (petalAvgPoint.getxPoint() - 2 * Math.sqrt(calcTotalVarianceForOneAttributeX(petalPointsWithEuclidanNorm, petalAvgPoint))) + " μ+2σ => " + (petalAvgPoint.getxPoint() + 2 * Math.sqrt(calcTotalVarianceForOneAttributeX(petalPointsWithEuclidanNorm, petalAvgPoint))));
+        System.out.println("⟨μ−2σ,μ+2σ⟩ of PETAL_Y: " + (petalAvgPoint.getyPoint() - 2 * Math.sqrt(calcTotalVarianceForOneAttributeY(petalPointsWithEuclidanNorm, petalAvgPoint))) + " μ+2σ => " + (petalAvgPoint.getyPoint() + 2 * Math.sqrt(calcTotalVarianceForOneAttributeY(petalPointsWithEuclidanNorm, petalAvgPoint))));
         System.out.println();
-        System.out.println("⟨μ−3σ,μ+3σ⟩ of SEPAL_X: " +(sepalAvgPoint.getxPoint() - 3*Math.sqrt(calcTotalVarianceForOneAttributeX(sepalPointsWithEuclidanNorm,sepalAvgPoint))) +" μ+3σ => "+ (sepalAvgPoint.getxPoint() + 3*Math.sqrt(calcTotalVarianceForOneAttributeX(sepalPointsWithEuclidanNorm,sepalAvgPoint))));
-        System.out.println("⟨μ−3σ,μ+3σ⟩ of SEPAL_Y: " +(sepalAvgPoint.getyPoint() - 3*Math.sqrt(calcTotalVarianceForOneAttributeY(sepalPointsWithEuclidanNorm,sepalAvgPoint))) +" μ+3σ => "+ (sepalAvgPoint.getyPoint() + 3*Math.sqrt(calcTotalVarianceForOneAttributeY(sepalPointsWithEuclidanNorm,sepalAvgPoint))));
-        System.out.println("⟨μ−3σ,μ+3σ⟩ of PETAL_X: " + (petalAvgPoint.getxPoint() -  3*Math.sqrt(calcTotalVarianceForOneAttributeX(petalPointsWithEuclidanNorm,petalAvgPoint))) + " μ+3σ => "  + (petalAvgPoint.getxPoint()+ 3*Math.sqrt(calcTotalVarianceForOneAttributeX(petalPointsWithEuclidanNorm,petalAvgPoint))));
-        System.out.println("⟨μ−3σ,μ+3σ⟩ of PETAL_Y: " +(petalAvgPoint.getyPoint() -  3*Math.sqrt(calcTotalVarianceForOneAttributeY(petalPointsWithEuclidanNorm,petalAvgPoint))) + " μ+3σ => "  + (petalAvgPoint.getyPoint()+ 3*Math.sqrt(calcTotalVarianceForOneAttributeY(petalPointsWithEuclidanNorm,petalAvgPoint))));
+        System.out.println("⟨μ−3σ,μ+3σ⟩ of SEPAL_X: " + (sepalAvgPoint.getxPoint() - 3 * Math.sqrt(calcTotalVarianceForOneAttributeX(sepalPointsWithEuclidanNorm, sepalAvgPoint))) + " μ+3σ => " + (sepalAvgPoint.getxPoint() + 3 * Math.sqrt(calcTotalVarianceForOneAttributeX(sepalPointsWithEuclidanNorm, sepalAvgPoint))));
+        System.out.println("⟨μ−3σ,μ+3σ⟩ of SEPAL_Y: " + (sepalAvgPoint.getyPoint() - 3 * Math.sqrt(calcTotalVarianceForOneAttributeY(sepalPointsWithEuclidanNorm, sepalAvgPoint))) + " μ+3σ => " + (sepalAvgPoint.getyPoint() + 3 * Math.sqrt(calcTotalVarianceForOneAttributeY(sepalPointsWithEuclidanNorm, sepalAvgPoint))));
+        System.out.println("⟨μ−3σ,μ+3σ⟩ of PETAL_X: " + (petalAvgPoint.getxPoint() - 3 * Math.sqrt(calcTotalVarianceForOneAttributeX(petalPointsWithEuclidanNorm, petalAvgPoint))) + " μ+3σ => " + (petalAvgPoint.getxPoint() + 3 * Math.sqrt(calcTotalVarianceForOneAttributeX(petalPointsWithEuclidanNorm, petalAvgPoint))));
+        System.out.println("⟨μ−3σ,μ+3σ⟩ of PETAL_Y: " + (petalAvgPoint.getyPoint() - 3 * Math.sqrt(calcTotalVarianceForOneAttributeY(petalPointsWithEuclidanNorm, petalAvgPoint))) + " μ+3σ => " + (petalAvgPoint.getyPoint() + 3 * Math.sqrt(calcTotalVarianceForOneAttributeY(petalPointsWithEuclidanNorm, petalAvgPoint))));
         System.out.println();
 
 
-        TreeMap<Double,Double> relativeFrequencyMapSepalX  = new TreeMap<>();
-        for(Map.Entry<Double,Double> m : sepalX.entrySet()){
-            relativeFrequencyMapSepalX.put(m.getKey(), (m.getValue()/(double)records.size()));
+        TreeMap<Double, Double> relativeFrequencyMapSepalX = new TreeMap<>();
+        for (Map.Entry<Double, Double> m : sepalX.entrySet()) {
+            relativeFrequencyMapSepalX.put(m.getKey(), (m.getValue() / (double) records.size()));
         }
 
-        TreeMap<Double,Double> nominalDistributionMapSepalX  = new TreeMap<>();
-        for(Map.Entry<Double,Double> m : sepalX.entrySet()){
-            nominalDistributionMapSepalX.put(m.getKey(), (countNominalDistribution(m.getKey(),sepalAvgPoint.getxPoint(),Math.sqrt(calcTotalVarianceForOneAttributeX(sepalPointsWithEuclidanNorm,sepalAvgPoint)))));
+        TreeMap<Double, Double> nominalDistributionMapSepalX = new TreeMap<>();
+        for (Map.Entry<Double, Double> m : sepalX.entrySet()) {
+            nominalDistributionMapSepalX.put(m.getKey(), (countNominalDistribution(m.getKey(), sepalAvgPoint.getxPoint(), Math.sqrt(calcTotalVarianceForOneAttributeX(sepalPointsWithEuclidanNorm, sepalAvgPoint)))));
         }
 
         XYChart relativeFrequencyMapSepalXChart = new XYChartBuilder().width(600).height(500).title("relativeFrequencyMapSepalX").xAxisTitle("X - width").yAxisTitle("Y - length").build();
@@ -240,20 +238,20 @@ public class Main {
         relativeFrequencyMapSepalXChart.getStyler().setChartTitleVisible(false);
         relativeFrequencyMapSepalXChart.getStyler().setLegendPosition(Styler.LegendPosition.InsideNW);
         relativeFrequencyMapSepalXChart.getStyler().setMarkerSize(16);
-        relativeFrequencyMapSepalXChart.addSeries("relativeFrequencyMapSepalX Series",new ArrayList<Double>(relativeFrequencyMapSepalX.keySet()),relativeFrequencyMapSepalX.values().stream().collect(Collectors.toList()));
-        XYSeries nominalDistributionMapSepalXChart = relativeFrequencyMapSepalXChart.addSeries("nominalDistributionMapSepalX",new ArrayList<Double>(nominalDistributionMapSepalX.keySet()),nominalDistributionMapSepalX.values().stream().collect(Collectors.toList()));
-        relativeFrequencyMapSepalXChart.addSeries("Mean", Collections.singletonList(sepalAvgPoint.getxPoint()),Collections.singletonList(sepalAvgPoint.getxPoint()/records.size()));
+        relativeFrequencyMapSepalXChart.addSeries("relativeFrequencyMapSepalX Series", new ArrayList<Double>(relativeFrequencyMapSepalX.keySet()), relativeFrequencyMapSepalX.values().stream().collect(Collectors.toList()));
+        XYSeries nominalDistributionMapSepalXChart = relativeFrequencyMapSepalXChart.addSeries("nominalDistributionMapSepalX", new ArrayList<Double>(nominalDistributionMapSepalX.keySet()), nominalDistributionMapSepalX.values().stream().collect(Collectors.toList()));
+        relativeFrequencyMapSepalXChart.addSeries("Mean", Collections.singletonList(sepalAvgPoint.getxPoint()), Collections.singletonList(sepalAvgPoint.getxPoint() / records.size()));
         new SwingWrapper<>(relativeFrequencyMapSepalXChart).displayChart();
 
 
-        TreeMap<Double,Double> relativeFrequencyMapSepalY  = new TreeMap<>();
-        for(Map.Entry<Double,Double> m : sepalY.entrySet()){
-            relativeFrequencyMapSepalY.put(m.getKey(), (m.getValue()/(double)records.size()));
+        TreeMap<Double, Double> relativeFrequencyMapSepalY = new TreeMap<>();
+        for (Map.Entry<Double, Double> m : sepalY.entrySet()) {
+            relativeFrequencyMapSepalY.put(m.getKey(), (m.getValue() / (double) records.size()));
         }
 
-        TreeMap<Double,Double> nominalDistributionMapSepalY  = new TreeMap<>();
-        for(Map.Entry<Double,Double> m : sepalY.entrySet()){
-            nominalDistributionMapSepalY.put(m.getKey(), (countNominalDistribution(m.getKey(),sepalAvgPoint.getyPoint(),Math.sqrt(calcTotalVarianceForOneAttributeY(sepalPointsWithEuclidanNorm,sepalAvgPoint)))));
+        TreeMap<Double, Double> nominalDistributionMapSepalY = new TreeMap<>();
+        for (Map.Entry<Double, Double> m : sepalY.entrySet()) {
+            nominalDistributionMapSepalY.put(m.getKey(), (countNominalDistribution(m.getKey(), sepalAvgPoint.getyPoint(), Math.sqrt(calcTotalVarianceForOneAttributeY(sepalPointsWithEuclidanNorm, sepalAvgPoint)))));
         }
 
         XYChart relativeFrequencyMapSepalYChart = new XYChartBuilder().width(600).height(500).title("relativeFrequencyMapSepalY").xAxisTitle("X - width").yAxisTitle("Y - length").build();
@@ -261,20 +259,20 @@ public class Main {
         relativeFrequencyMapSepalYChart.getStyler().setChartTitleVisible(false);
         relativeFrequencyMapSepalYChart.getStyler().setLegendPosition(Styler.LegendPosition.InsideNW);
         relativeFrequencyMapSepalYChart.getStyler().setMarkerSize(16);
-        relativeFrequencyMapSepalYChart.addSeries("relativeFrequencyMapSepalY Series",new ArrayList<Double>(relativeFrequencyMapSepalY.keySet()),relativeFrequencyMapSepalY.values().stream().collect(Collectors.toList()));
-        XYSeries nominalDistributionMapSepalYChart = relativeFrequencyMapSepalYChart.addSeries("relativeFrequencyMapSepalYChart",new ArrayList<Double>(nominalDistributionMapSepalY.keySet()),nominalDistributionMapSepalY.values().stream().collect(Collectors.toList()));
+        relativeFrequencyMapSepalYChart.addSeries("relativeFrequencyMapSepalY Series", new ArrayList<Double>(relativeFrequencyMapSepalY.keySet()), relativeFrequencyMapSepalY.values().stream().collect(Collectors.toList()));
+        XYSeries nominalDistributionMapSepalYChart = relativeFrequencyMapSepalYChart.addSeries("relativeFrequencyMapSepalYChart", new ArrayList<Double>(nominalDistributionMapSepalY.keySet()), nominalDistributionMapSepalY.values().stream().collect(Collectors.toList()));
 
         new SwingWrapper<>(relativeFrequencyMapSepalYChart).displayChart();
 
 
-        TreeMap<Double,Double> relativeFrequencyMapPetalX  = new TreeMap<>();
-        for(Map.Entry<Double,Double> m : petalX.entrySet()){
-            relativeFrequencyMapPetalX.put(m.getKey(), (m.getValue()/(double)records.size()));
+        TreeMap<Double, Double> relativeFrequencyMapPetalX = new TreeMap<>();
+        for (Map.Entry<Double, Double> m : petalX.entrySet()) {
+            relativeFrequencyMapPetalX.put(m.getKey(), (m.getValue() / (double) records.size()));
         }
 
-        TreeMap<Double,Double> nominalDistributionMapPetalX  = new TreeMap<>();
-        for(Map.Entry<Double,Double> m : petalX.entrySet()){
-            nominalDistributionMapPetalX.put(m.getKey(), (countNominalDistribution(m.getKey(),petalAvgPoint.getxPoint(),Math.sqrt(calcTotalVarianceForOneAttributeX(petalPointsWithEuclidanNorm,petalAvgPoint)))));
+        TreeMap<Double, Double> nominalDistributionMapPetalX = new TreeMap<>();
+        for (Map.Entry<Double, Double> m : petalX.entrySet()) {
+            nominalDistributionMapPetalX.put(m.getKey(), (countNominalDistribution(m.getKey(), petalAvgPoint.getxPoint(), Math.sqrt(calcTotalVarianceForOneAttributeX(petalPointsWithEuclidanNorm, petalAvgPoint)))));
         }
 
         XYChart relativeFrequencyMapPetalXChart = new XYChartBuilder().width(600).height(500).title("relativeFrequencyMapPetalX").xAxisTitle("X - width").yAxisTitle("Y - length").build();
@@ -282,20 +280,20 @@ public class Main {
         relativeFrequencyMapPetalXChart.getStyler().setChartTitleVisible(false);
         relativeFrequencyMapPetalXChart.getStyler().setLegendPosition(Styler.LegendPosition.InsideNW);
         relativeFrequencyMapPetalXChart.getStyler().setMarkerSize(16);
-        relativeFrequencyMapPetalXChart.addSeries("relativeFrequencyMapPetalXChart Series",new ArrayList<Double>(relativeFrequencyMapPetalX.keySet()),relativeFrequencyMapPetalX.values().stream().collect(Collectors.toList()));
-        relativeFrequencyMapPetalXChart.addSeries("nominalDistributionMapPetalX Series",new ArrayList<Double>(nominalDistributionMapPetalX.keySet()),nominalDistributionMapPetalX.values().stream().collect(Collectors.toList()));
+        relativeFrequencyMapPetalXChart.addSeries("relativeFrequencyMapPetalXChart Series", new ArrayList<Double>(relativeFrequencyMapPetalX.keySet()), relativeFrequencyMapPetalX.values().stream().collect(Collectors.toList()));
+        relativeFrequencyMapPetalXChart.addSeries("nominalDistributionMapPetalX Series", new ArrayList<Double>(nominalDistributionMapPetalX.keySet()), nominalDistributionMapPetalX.values().stream().collect(Collectors.toList()));
 //        relativeFrequencyMapPetalXChart.addSeries("Mean Series",Collections.singletonList(sepalAvgPoint.getyPoint()), Collections.singletonList(sepalAvgPoint.getyPoint()/(double)records.size())).setFillColor(Color.MAGENTA);
         new SwingWrapper<>(relativeFrequencyMapPetalXChart).displayChart();
 
 
-        TreeMap<Double,Double> relativeFrequencyMapPetalY  = new TreeMap<>();
-        for(Map.Entry<Double,Double> m : petalY.entrySet()){
-            relativeFrequencyMapPetalY.put(m.getKey(), (m.getValue()/(double)records.size()));
+        TreeMap<Double, Double> relativeFrequencyMapPetalY = new TreeMap<>();
+        for (Map.Entry<Double, Double> m : petalY.entrySet()) {
+            relativeFrequencyMapPetalY.put(m.getKey(), (m.getValue() / (double) records.size()));
         }
 
-        TreeMap<Double,Double> nominalDistributionMapPetalY  = new TreeMap<>();
-        for(Map.Entry<Double,Double> m : petalY.entrySet()){
-            nominalDistributionMapPetalY.put(m.getKey(), (countNominalDistribution(m.getKey(),petalAvgPoint.getyPoint(),Math.sqrt(calcTotalVarianceForOneAttributeY(petalPointsWithEuclidanNorm,petalAvgPoint)))));
+        TreeMap<Double, Double> nominalDistributionMapPetalY = new TreeMap<>();
+        for (Map.Entry<Double, Double> m : petalY.entrySet()) {
+            nominalDistributionMapPetalY.put(m.getKey(), (countNominalDistribution(m.getKey(), petalAvgPoint.getyPoint(), Math.sqrt(calcTotalVarianceForOneAttributeY(petalPointsWithEuclidanNorm, petalAvgPoint)))));
         }
 
         XYChart relativeFrequencyMapPetalYChart = new XYChartBuilder().width(600).height(500).title("relativeFrequencyMapPetalY").xAxisTitle("X - width").yAxisTitle("Y - length").build();
@@ -303,11 +301,43 @@ public class Main {
         relativeFrequencyMapPetalYChart.getStyler().setChartTitleVisible(false);
         relativeFrequencyMapPetalYChart.getStyler().setLegendPosition(Styler.LegendPosition.InsideNW);
         relativeFrequencyMapPetalYChart.getStyler().setMarkerSize(16);
-        relativeFrequencyMapPetalYChart.addSeries("relativeFrequencyMapPetalYChart Series",new ArrayList<Double>(relativeFrequencyMapPetalY.keySet()),relativeFrequencyMapPetalY.values().stream().collect(Collectors.toList()));
-        relativeFrequencyMapPetalYChart.addSeries("nominalDistributionMapPetalY Series",new ArrayList<Double>(nominalDistributionMapPetalY.keySet()),nominalDistributionMapPetalY.values().stream().collect(Collectors.toList()));
+        relativeFrequencyMapPetalYChart.addSeries("relativeFrequencyMapPetalYChart Series", new ArrayList<Double>(relativeFrequencyMapPetalY.keySet()), relativeFrequencyMapPetalY.values().stream().collect(Collectors.toList()));
+        relativeFrequencyMapPetalYChart.addSeries("nominalDistributionMapPetalY Series", new ArrayList<Double>(nominalDistributionMapPetalY.keySet()), nominalDistributionMapPetalY.values().stream().collect(Collectors.toList()));
 
         new SwingWrapper<>(relativeFrequencyMapPetalYChart).displayChart();
+
+
 //
+//        TreeMap<Double,Double> nominalDistanceDistributionSepal  = new TreeMap<>();
+//        for(Map.Entry<Double,Double> m : euclidandistanceFrequencyOfSepalX.entrySet()){
+//            nominalDistanceDistributionSepal.put(m.getKey(), (countNominalDistribution(m.getKey(),sepalAvgPoint.getxPoint(),Math.sqrt(calcTotalVarianceForOneAttributeX(sepalPointsWithEuclidanNorm,sepalAvgPoint)))));
+//        }
+
+
+//
+//        TreeMap<Double, Double> empiricDistanceDistributionOfSepalX = calcEmpiricDistributionOfDistanceOfList(sepalPointsWithEuclidanNorm, records.size(), true, true);
+//        TreeMap<Double, Double> normalDistanceDistributionOfSepalX = calcNormalDistributionOfDistanceOfList(sepalPointsWithEuclidanNorm, true);
+//        XYChart normalDistanceDistributionOfSepalXChart = createChart("empiricDistributionOfDistanceSepalX", new ArrayList<Double>(empiricDistanceDistributionOfSepalX.keySet()), empiricDistanceDistributionOfSepalX.values().stream().collect(Collectors.toList()));
+//        new SwingWrapper<>(normalDistanceDistributionOfSepalXChart).displayChart();
+
+//
+//        TreeMap<Double, Double> empiricDistanceDistributionOfSepalY = calcEmpiricDistributionOfDistanceOfList(sepalPointsWithEuclidanNorm, records.size(), true, false);
+//
+//        new SwingWrapper<>(createChart("empiricDistributionOfDistanceSepalY", new ArrayList<Double>(empiricDistanceDistributionOfSepalY.keySet()), empiricDistanceDistributionOfSepalY.values().stream().collect(Collectors.toList()))).displayChart();
+
+//
+//        TreeMap<Double, Double> empiricDistanceDistributionOfPetalX = calcEmpiricDistributionOfDistanceOfList(petalPointsWithEuclidanNorm, records.size(), true, true);
+//
+//        new SwingWrapper<>(createChart("empiricDistributionOfDistancePetalX", new ArrayList<Double>(empiricDistanceDistributionOfPetalX.keySet()), empiricDistanceDistributionOfPetalX.values().stream().collect(Collectors.toList()))).displayChart();
+
+
+//        TreeMap<Double, Double> empiricDistanceDistributionOfPetalY = calcEmpiricDistributionOfDistanceOfList(petalPointsWithEuclidanNorm, records.size(), true, false);
+//
+//        new SwingWrapper<>(createChart("empiricDistanceDistributionOfPetalY", new ArrayList<Double>(empiricDistanceDistributionOfPetalY.keySet()), empiricDistanceDistributionOfPetalY.values().stream().collect(Collectors.toList()))).displayChart();
+
+//            TreeMap<List<Double>,Double> allempiricDistanceDistribution = calcEmpiricDistributionOfDistanceOfAll(xSepalData,ySepalData,xPetalData,yPetalData);
+//        new SwingWrapper<>(createChart("empiricDistributionOfDistancePetalX", new ArrayList<Double>(relativeFrequencyMapPetalY.keySet()), allempiricDistanceDistribution.values().stream().collect(Collectors.toList()))).displayChart();
+
 //        HashMap<Double,Double> relativeFrequencyMapPetalY  = new HashMap<>();
 //        for(Map.Entry<Double,Double> m : petalY.entrySet()){
 //            relativeFrequencyMapPetalY.put(m.getKey(), (m.getValue()/(double)records.size()));
@@ -357,11 +387,139 @@ public class Main {
 
     }
 
+
+    private  List<Double> setKMeans(int numberOfCentroids, List<Double> vals){
+        List<Double> actualCentroid = new ArrayList<>();
+        for (int i = 0; i <numberOfCentroids ; i++) {
+            actualCentroid.add(vals.get((int)(Math.random() * vals.size())));
+        }
+        return  actualCentroid;
+    }
+
+    private static XYChart createChart(String title, List<Double> xVals, List<Double> yVals) {
+        XYChart empiricDistributionOfSepalXChart = new XYChartBuilder().width(600).height(500).title(title).xAxisTitle("empiric val").yAxisTitle("occurrences").build();
+        empiricDistributionOfSepalXChart.getStyler().setDefaultSeriesRenderStyle(XYSeries.XYSeriesRenderStyle.Line);
+        empiricDistributionOfSepalXChart.getStyler().setChartTitleVisible(false);
+        empiricDistributionOfSepalXChart.getStyler().setLegendPosition(Styler.LegendPosition.InsideNW);
+        empiricDistributionOfSepalXChart.getStyler().setMarkerSize(16);
+        empiricDistributionOfSepalXChart.addSeries(title + " Series", xVals, yVals);
+//        XYSeries nominalDistributionMapSepalXChart = empiricDistributionOfSepalChart.addSeries("nominalDistributionMapSepalX",new ArrayList<Double>(nominalDistributionMapSepalX.keySet()),nominalDistributionMapSepalX.values().stream().collect(Collectors.toList()));
+//        empiricDistributionOfSepalChart.addSeries("Mean", Collections.singletonList(sepalAvgPoint.getxPoint()),Collections.singletonList(sepalAvgPoint.getxPoint()/records.size()));
+        return empiricDistributionOfSepalXChart;
+    }
+
+    private static TreeMap<Double, Double> calcNormalDistributionOfDistanceOfList(List<Point> vals, boolean calcX) {
+        DecimalFormat df = new DecimalFormat("#.#");
+        Double mean = 0.0;
+        Double variance = 0.0;
+        Double deviation = 0.0;
+        TreeMap<Double, Double> euclidianDistancesRelativeFrequency = new TreeMap<Double, Double>();
+        List<Double> euclidanDistances = new ArrayList<>();
+        for (Point fp : vals) {
+            for (Point sp : vals) {
+                Double actualVal = 0.0;
+                if (calcX) {
+                    actualVal = Double.parseDouble(df.format(calculateEuclidanDistanceForOneAttribute(fp.getxPoint(), sp.getxPoint())));
+                } else {
+                    actualVal = Double.parseDouble(df.format(calculateEuclidanDistanceForOneAttribute(fp.getyPoint(), sp.getyPoint())));
+                }
+                mean += actualVal;
+                euclidanDistances.add(actualVal);
+                if (euclidianDistancesRelativeFrequency.containsKey(actualVal)) {
+                    euclidianDistancesRelativeFrequency.put(actualVal, (euclidianDistancesRelativeFrequency.get(actualVal) + 1.0));
+                } else {
+                    euclidianDistancesRelativeFrequency.put(actualVal, 1.0);
+                }
+            }
+
+        }
+
+        mean = mean / ((double) (150));
+
+        for (Double varVal : euclidanDistances) {
+            variance += Math.pow(varVal - mean, 2);
+        }
+
+        variance = variance / ((double) (150));
+        deviation = Math.sqrt(variance);
+        TreeMap<Double, Double> euclidianNormalDistributionOfDistances = new TreeMap<Double, Double>();
+        for (Map.Entry<Double, Double> e : euclidianDistancesRelativeFrequency.entrySet()) {
+            euclidianNormalDistributionOfDistances.put(e.getKey(), countNominalDistribution(e.getValue(), mean, deviation));
+        }
+        return euclidianNormalDistributionOfDistances;
+    }
+
+    private static TreeMap<Double, Double> calcEmpiricDistributionOfDistanceOfList(List<Point> vals, int amountOfRecords, boolean calcEmpiricDistance, boolean calcX) {
+        DecimalFormat df = new DecimalFormat("#.#");
+        TreeMap<Double, Double> freqMap = new TreeMap<Double, Double>();
+        for (Point fp : vals) {
+            for (Point sp : vals) {
+                Double actualEucVal = 0.0;
+                if (calcX) {
+                    actualEucVal = Math.abs(calculateEuclidanDistanceForOneAttribute(fp.getxPoint(), sp.getxPoint()));
+                } else {
+                    actualEucVal = Math.abs(calculateEuclidanDistanceForOneAttribute(fp.getyPoint(), sp.getyPoint()));
+                }
+
+                actualEucVal = Math.abs(Double.parseDouble(df.format(actualEucVal)));
+                if (freqMap.containsKey(actualEucVal)) {
+                    freqMap.put(actualEucVal, (freqMap.get(actualEucVal) + 1.0));
+                } else {
+                    freqMap.put(actualEucVal, (1.0));
+                }
+            }
+        }
+
+        if (calcEmpiricDistance) {
+            TreeMap<Double, Double> empiricDistanceDistribution = new TreeMap<>();
+            for (Map.Entry<Double, Double> m : freqMap.entrySet()) {
+                empiricDistanceDistribution.put(m.getKey(), (m.getValue() / (double) amountOfRecords));
+            }
+            return empiricDistanceDistribution;
+        }
+        return freqMap;
+    }
+
+    private static TreeMap<List<Double>, Double> calcEmpiricDistributionOfDistanceOfAll(List<Double> xSepalData, List<Double> ySepalData, List<Double> xPetalData, List<Double> yPetalData) {
+
+
+        DecimalFormat df = new DecimalFormat("#.#");
+        TreeMap<List<Double>, Double> freqMap = new TreeMap<List<Double>, Double>();
+        List<List<Double>> vals = new ArrayList<>();
+        for (int i = 0; i < xSepalData.size(); i++) {
+            Double sepX = xSepalData.get(i);
+            Double sepY = ySepalData.get(i);
+            Double petX = xPetalData.get(i);
+            Double petY = yPetalData.get(i);
+            List<Double> actArrList = new ArrayList<>();
+            actArrList.add(sepX);
+            actArrList.add(sepY);
+            actArrList.add(petX);
+            actArrList.add(petY);
+            vals.add(actArrList);
+        }
+        for (int i = 0; i < vals.size(); i++) {
+            if (!freqMap.containsKey(vals.get(i))) {
+                freqMap.put(vals.get(i), 0.0);
+            }
+            freqMap.put(vals.get(i), freqMap.get(vals.get(i)) + 1.0);
+        }
+
+        TreeMap<List<Double>, Double> empiricDistanceDistribution = new TreeMap<>();
+        for (int i = 0; i < vals.size(); i++) {
+        }
+        for (Map.Entry<List<Double>, Double> m : freqMap.entrySet()) {
+            empiricDistanceDistribution.put(m.getKey(), (m.getValue() / (double) vals.size()));
+        }
+        return empiricDistanceDistribution;
+    }
+
+
     private static HashMap<Double, Double> calcFrequencyOfListX(List<Point> points) {
         HashMap freqOfvales = new HashMap<Double, Integer>();
 
         for (Point p : points) {
-            if (freqOfvales.containsKey(p.getxPoint())) {
+            if (!freqOfvales.containsKey(p.getxPoint())) {
                 freqOfvales.put(p.getxPoint(), 0.0);
             }
             freqOfvales.put(p.getxPoint(), calcFrequencyX(points, p.getxPoint()));
@@ -375,10 +533,10 @@ public class Main {
         HashMap freqOfvales = new HashMap<Double, Double>();
 
         for (Point p : points) {
-            if (freqOfvales.containsKey(p.getyPoint())) {
+            if (!freqOfvales.containsKey(p.getyPoint())) {
                 freqOfvales.put(p.getyPoint(), 0);
             }
-            freqOfvales.put(p.getyPoint(), (double)(calcFrequencyY(points, p.getyPoint())));
+            freqOfvales.put(p.getyPoint(), (double) (calcFrequencyY(points, p.getyPoint())));
 
         }
         return freqOfvales;
@@ -437,12 +595,11 @@ public class Main {
 
     }
 
-    public static double findMedianForX(List<Point> points, int n)
-    {
+    public static double findMedianForX(List<Point> points, int n) {
         Double[] vals = new Double[points.size()];
 
         for (int i = 0; i < vals.length; i++) {
-            vals[i]= points.get(i).getxPoint();
+            vals[i] = points.get(i).getxPoint();
         }
 
         // First we sort the array
@@ -450,18 +607,17 @@ public class Main {
 
         // check for even case
         if (n % 2 != 0)
-            return (double)vals[n / 2];
+            return (double) vals[n / 2];
 
-        return (double)(vals[(n - 1) / 2] + vals[n / 2]) / 2.0;
+        return (double) (vals[(n - 1) / 2] + vals[n / 2]) / 2.0;
     }
 
 
-    public static double findMedianForY(List<Point> points, int n)
-    {
+    public static double findMedianForY(List<Point> points, int n) {
         Double[] vals = new Double[points.size()];
 
         for (int i = 0; i < vals.length; i++) {
-            vals[i]= points.get(i).getyPoint();
+            vals[i] = points.get(i).getyPoint();
         }
 
         // First we sort the array
@@ -469,9 +625,9 @@ public class Main {
 
         // check for even case
         if (n % 2 != 0)
-            return (double)vals[n / 2];
+            return (double) vals[n / 2];
 
-        return (double)(vals[(n - 1) / 2] + vals[n / 2]) / 2.0;
+        return (double) (vals[(n - 1) / 2] + vals[n / 2]) / 2.0;
     }
 
     private static Point calculateAveragePoint(List<List<String>> records, int widthIndex, int lengthIndex) {
@@ -518,8 +674,12 @@ public class Main {
         return Math.sqrt((y2 - y1) * (y2 - y1) + (x2 - x1) * (x2 - x1));
     }
 
+    private static Double calculateEuclidanDistanceFor4D(Double x1, Double x2, Double x3, Double x4, Double y1, Double y2, Double y3, Double y4) {
+        return Math.sqrt((Math.pow(x1 - y1, 2)) + (Math.pow(x2 - y2, 2)) + (Math.pow(x3 - y3, 2)) + (Math.pow(x4 - y4, 2)));
+    }
+
     private static Double calculateEuclidanDistanceForOneAttribute(Double x1, Double x2) {
-        return Math.sqrt( (x2 - x1) * (x2 - x1));
+        return Math.sqrt((x2 - x1) * (x2 - x1));
     }
 
     private static Double calculateCosineSimilarity(Point a, Point b) {
@@ -561,8 +721,8 @@ public class Main {
         return bestPointToMatch;
     }
 
-    public static Double countNominalDistribution(double x, double mean, double deviation){
-        return (1/(Math.sqrt(2*Math.PI*Math.pow(deviation,2))))*Math.exp(-((Math.pow((x - mean),2))/(2*Math.pow(deviation,2))))/5;
+    public static Double countNominalDistribution(double x, double mean, double deviation) {
+        return (1 / (Math.sqrt(2 * Math.PI * Math.pow(deviation, 2)))) * Math.exp(-((Math.pow((x - mean), 2)) / (2 * Math.pow(deviation, 2)))) / 5;
     }
 
 
