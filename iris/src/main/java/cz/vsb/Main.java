@@ -241,7 +241,7 @@ public class Main {
         relativeFrequencyMapSepalXChart.addSeries("relativeFrequencyMapSepalX Series", new ArrayList<Double>(relativeFrequencyMapSepalX.keySet()), relativeFrequencyMapSepalX.values().stream().collect(Collectors.toList()));
         XYSeries nominalDistributionMapSepalXChart = relativeFrequencyMapSepalXChart.addSeries("nominalDistributionMapSepalX", new ArrayList<Double>(nominalDistributionMapSepalX.keySet()), nominalDistributionMapSepalX.values().stream().collect(Collectors.toList()));
         relativeFrequencyMapSepalXChart.addSeries("Mean", Collections.singletonList(sepalAvgPoint.getxPoint()), Collections.singletonList(sepalAvgPoint.getxPoint() / records.size()));
-        new SwingWrapper<>(relativeFrequencyMapSepalXChart).displayChart();
+//        new SwingWrapper<>(relativeFrequencyMapSepalXChart).displayChart();
 
 
         TreeMap<Double, Double> relativeFrequencyMapSepalY = new TreeMap<>();
@@ -262,7 +262,7 @@ public class Main {
         relativeFrequencyMapSepalYChart.addSeries("relativeFrequencyMapSepalY Series", new ArrayList<Double>(relativeFrequencyMapSepalY.keySet()), relativeFrequencyMapSepalY.values().stream().collect(Collectors.toList()));
         XYSeries nominalDistributionMapSepalYChart = relativeFrequencyMapSepalYChart.addSeries("relativeFrequencyMapSepalYChart", new ArrayList<Double>(nominalDistributionMapSepalY.keySet()), nominalDistributionMapSepalY.values().stream().collect(Collectors.toList()));
 
-        new SwingWrapper<>(relativeFrequencyMapSepalYChart).displayChart();
+//        new SwingWrapper<>(relativeFrequencyMapSepalYChart).displayChart();
 
 
         TreeMap<Double, Double> relativeFrequencyMapPetalX = new TreeMap<>();
@@ -283,7 +283,7 @@ public class Main {
         relativeFrequencyMapPetalXChart.addSeries("relativeFrequencyMapPetalXChart Series", new ArrayList<Double>(relativeFrequencyMapPetalX.keySet()), relativeFrequencyMapPetalX.values().stream().collect(Collectors.toList()));
         relativeFrequencyMapPetalXChart.addSeries("nominalDistributionMapPetalX Series", new ArrayList<Double>(nominalDistributionMapPetalX.keySet()), nominalDistributionMapPetalX.values().stream().collect(Collectors.toList()));
 //        relativeFrequencyMapPetalXChart.addSeries("Mean Series",Collections.singletonList(sepalAvgPoint.getyPoint()), Collections.singletonList(sepalAvgPoint.getyPoint()/(double)records.size())).setFillColor(Color.MAGENTA);
-        new SwingWrapper<>(relativeFrequencyMapPetalXChart).displayChart();
+//        new SwingWrapper<>(relativeFrequencyMapPetalXChart).displayChart();
 
 
         TreeMap<Double, Double> relativeFrequencyMapPetalY = new TreeMap<>();
@@ -304,96 +304,149 @@ public class Main {
         relativeFrequencyMapPetalYChart.addSeries("relativeFrequencyMapPetalYChart Series", new ArrayList<Double>(relativeFrequencyMapPetalY.keySet()), relativeFrequencyMapPetalY.values().stream().collect(Collectors.toList()));
         relativeFrequencyMapPetalYChart.addSeries("nominalDistributionMapPetalY Series", new ArrayList<Double>(nominalDistributionMapPetalY.keySet()), nominalDistributionMapPetalY.values().stream().collect(Collectors.toList()));
 
-        new SwingWrapper<>(relativeFrequencyMapPetalYChart).displayChart();
-
-
-//
-//        TreeMap<Double,Double> nominalDistanceDistributionSepal  = new TreeMap<>();
-//        for(Map.Entry<Double,Double> m : euclidandistanceFrequencyOfSepalX.entrySet()){
-//            nominalDistanceDistributionSepal.put(m.getKey(), (countNominalDistribution(m.getKey(),sepalAvgPoint.getxPoint(),Math.sqrt(calcTotalVarianceForOneAttributeX(sepalPointsWithEuclidanNorm,sepalAvgPoint)))));
-//        }
-
-
-//
-//        TreeMap<Double, Double> empiricDistanceDistributionOfSepalX = calcEmpiricDistributionOfDistanceOfList(sepalPointsWithEuclidanNorm, records.size(), true, true);
-//        TreeMap<Double, Double> normalDistanceDistributionOfSepalX = calcNormalDistributionOfDistanceOfList(sepalPointsWithEuclidanNorm, true);
-//        XYChart normalDistanceDistributionOfSepalXChart = createChart("empiricDistributionOfDistanceSepalX", new ArrayList<Double>(empiricDistanceDistributionOfSepalX.keySet()), empiricDistanceDistributionOfSepalX.values().stream().collect(Collectors.toList()));
-//        new SwingWrapper<>(normalDistanceDistributionOfSepalXChart).displayChart();
-
-//
-//        TreeMap<Double, Double> empiricDistanceDistributionOfSepalY = calcEmpiricDistributionOfDistanceOfList(sepalPointsWithEuclidanNorm, records.size(), true, false);
-//
-//        new SwingWrapper<>(createChart("empiricDistributionOfDistanceSepalY", new ArrayList<Double>(empiricDistanceDistributionOfSepalY.keySet()), empiricDistanceDistributionOfSepalY.values().stream().collect(Collectors.toList()))).displayChart();
-
-//
-//        TreeMap<Double, Double> empiricDistanceDistributionOfPetalX = calcEmpiricDistributionOfDistanceOfList(petalPointsWithEuclidanNorm, records.size(), true, true);
-//
-//        new SwingWrapper<>(createChart("empiricDistributionOfDistancePetalX", new ArrayList<Double>(empiricDistanceDistributionOfPetalX.keySet()), empiricDistanceDistributionOfPetalX.values().stream().collect(Collectors.toList()))).displayChart();
-
-
-//        TreeMap<Double, Double> empiricDistanceDistributionOfPetalY = calcEmpiricDistributionOfDistanceOfList(petalPointsWithEuclidanNorm, records.size(), true, false);
-//
-//        new SwingWrapper<>(createChart("empiricDistanceDistributionOfPetalY", new ArrayList<Double>(empiricDistanceDistributionOfPetalY.keySet()), empiricDistanceDistributionOfPetalY.values().stream().collect(Collectors.toList()))).displayChart();
-
-//            TreeMap<List<Double>,Double> allempiricDistanceDistribution = calcEmpiricDistributionOfDistanceOfAll(xSepalData,ySepalData,xPetalData,yPetalData);
-//        new SwingWrapper<>(createChart("empiricDistributionOfDistancePetalX", new ArrayList<Double>(relativeFrequencyMapPetalY.keySet()), allempiricDistanceDistribution.values().stream().collect(Collectors.toList()))).displayChart();
-
-//        HashMap<Double,Double> relativeFrequencyMapPetalY  = new HashMap<>();
-//        for(Map.Entry<Double,Double> m : petalY.entrySet()){
-//            relativeFrequencyMapPetalY.put(m.getKey(), (m.getValue()/(double)records.size()));
-//        }
-//        XYChart relativeFrequencyMapPetalYChart = new XYChartBuilder().width(600).height(500).title("relativeFrequencyMapPetalYChart").xAxisTitle("X - width").yAxisTitle("Y - length").build();
-//        relativeFrequencyMapPetalXChart.getStyler().setDefaultSeriesRenderStyle(XYSeries.XYSeriesRenderStyle.Scatter);
-//        relativeFrequencyMapPetalXChart.getStyler().setChartTitleVisible(false);
-//        relativeFrequencyMapPetalXChart.getStyler().setLegendPosition(Styler.LegendPosition.InsideNW);
-//        relativeFrequencyMapPetalXChart.getStyler().setMarkerSize(16);
-//        relativeFrequencyMapPetalXChart.addSeries("relativeFrequencyMapPetalYChart Series",new ArrayList<Double>(relativeFrequencyMapPetalY.keySet()),relativeFrequencyMapPetalY.values().stream().collect(Collectors.toList()));
 //        new SwingWrapper<>(relativeFrequencyMapPetalYChart).displayChart();
-//
-//
-//
+        List<FullPoint> vals = new ArrayList<>();
+        for (int n = 0; n < xSepalData.size(); n++) {
+            Double sepX = xSepalData.get(n);
+            Double sepY = ySepalData.get(n);
+            Double petX = xPetalData.get(n);
+            Double petY = yPetalData.get(n);
+            FullPoint fp = new FullPoint(sepX, sepY, petX, petY);
+
+            vals.add(fp);
+        }
+
+        List<HashMap<FullPoint, List<FullPoint>>> mapOfClusterMaps = new ArrayList<>();
 
 
-//        HashMap petalY = calcFrequencyOfListY(petalPointsWithEuclidanNorm);
-//        HashMap sepalX = calcFrequencyOfListX(sepalPointsWithEuclidanNorm);
-//        HashMap sepalY = calcFrequencyOfListY(sepalPointsWithEuclidanNorm);
 
 
-//       double [] petalKeySetX = new double[petalX.keySet().size()];
-//        for (int j = 0; j <petalX.keySet().size() ; j++) {
-//
-//        }
-//       double [] petalValSetX = new  double[petalX.values().size()];
-//        XYChart petalXFrequency = new XYChartBuilder().width(600).height(500).title("Sepal width and length").xAxisTitle("X - width").yAxisTitle("Y - length").build();
+        for (int j = 0; j < 5; j++) {
+            HashMap<FullPoint, List<FullPoint>> kk = setKMeans(3, vals);
+            HashMap<FullPoint, List<FullPoint>> newCentroids = calculateNewCentroids(kk, vals);
+            int it = 0;
+            while (true) {
+                List<FullPoint> oldCentroids = new ArrayList<>(newCentroids.keySet());
+                List<FullPoint> newerCentroids = new ArrayList<>(calculateNewCentroids(newCentroids, vals).keySet());
+                if (checkIfCentroidsEqual(oldCentroids, newerCentroids)) {
+                    mapOfClusterMaps.add(newCentroids);
+                    break;
+                }
+                newCentroids = calculateNewCentroids(newCentroids, vals);
+                it++;
+            }
+            System.out.println("ite: " + it);
+        }
 
-//        XYChart sepalChart = new XYChartBuilder().width(600).height(500).title("Sepal width and length").xAxisTitle("X - width").yAxisTitle("Y - length").build();
-//        XYSeries sepalSeries = petalChart.addSeries("Sepal Average", Collections.singletonList(sepalAvgPoint.getxPoint()), Collections.singletonList(sepalAvgPoint.getyPoint()));
-
-//        sepalSeries.getStyler().setDefaultSeriesRenderStyle(XYSeries.XYSeriesRenderStyle.Scatter);
-//        sepalSeries.getStyler().setChartTitleVisible(false);
-//        sepalSeries.getStyler().setLegendPosition(Styler.LegendPosition.InsideNW);
-//        sepalSeries.getStyler().setMarkerSize(16);
-
-
-//
-//
-
-//        System.out.println("petal  x"+calcFrequencyOfListX(petalPointsWithEuclidanNorm));
-//        System.out.println("peta y"+calcFrequencyOfListY(petalPointsWithEuclidanNorm));
-//        new SwingWrapper(petalChart).displayChart();
-//        new SwingWrapper(petalXFrequency).displayChart();
-//
-
-
+        List<Double[]> sseResults =  calculateSSE(mapOfClusterMaps);
     }
 
-
-    private  List<Double> setKMeans(int numberOfCentroids, List<Double> vals){
-        List<Double> actualCentroid = new ArrayList<>();
-        for (int i = 0; i <numberOfCentroids ; i++) {
-            actualCentroid.add(vals.get((int)(Math.random() * vals.size())));
+    private static List<Double[]> calculateSSE(List<HashMap<FullPoint, List<FullPoint>>> listOfclusterMaps) {
+        List<Double[]>  listOfSSEValuesOfEachCluster = new ArrayList<>();
+        for (HashMap<FullPoint, List<FullPoint>> clusterMap : listOfclusterMaps) {
+            Double[] ssesOfClustersOfCurrentMap = calculateSumOfTheSquaresOfTheDistancesOfEachPointFromTheCentroid(clusterMap);
+            listOfSSEValuesOfEachCluster.add(ssesOfClustersOfCurrentMap);
         }
-        return  actualCentroid;
+        return listOfSSEValuesOfEachCluster;
+    }
+
+    private static Double[] calculateSumOfTheSquaresOfTheDistancesOfEachPointFromTheCentroid(HashMap<FullPoint, List<FullPoint>> clusterMap) {
+        Double[] ssesOfClusters = new Double[clusterMap.keySet().size()];
+        for (int i = 0; i < ssesOfClusters.length; i++) {
+            ssesOfClusters[i] = 0.0;
+        }
+
+        for (int i = 0; i < clusterMap.keySet().size(); i++) {
+            List<FullPoint> actualClusters = new ArrayList(clusterMap.keySet());
+            for (int j = 0; j < clusterMap.get(actualClusters.get(i)).size(); j++) {
+                ssesOfClusters[i] += calculateEuclidanDistanceFor4D(actualClusters.get(i).getxSepalPoint(), actualClusters.get(i).getySepalPoint(), actualClusters.get(i).getxPetalPoint(), actualClusters.get(i).getyPetalPoint(), clusterMap.get(actualClusters.get(i)).get(j).getxSepalPoint(), clusterMap.get(actualClusters.get(i)).get(j).getySepalPoint(), clusterMap.get(actualClusters.get(i)).get(j).getxPetalPoint(), clusterMap.get(actualClusters.get(i)).get(j).getyPetalPoint());
+            }
+        }
+        return ssesOfClusters;
+    }
+
+    private static boolean checkIfCentroidsEqual(List<FullPoint> oldCentroids, List<FullPoint> newCentroids) {
+        return oldCentroids.equals(newCentroids);
+    }
+
+    private static HashMap<FullPoint, List<FullPoint>> calculateNewCentroids(HashMap<FullPoint, List<FullPoint>> previousClusterData, List<FullPoint> vals) {
+        HashMap<FullPoint, List<FullPoint>> newCentroids = new HashMap<>();
+        DecimalFormat df = new DecimalFormat("#.#");
+        for (FullPoint centroid : previousClusterData.keySet()) {
+            FullPoint newCentroid = new FullPoint(0.0, 0.0, 0.0, 0.0);
+            previousClusterData.get(centroid).stream().forEach(fullPoint -> {
+                newCentroid.setxSepalPoint(newCentroid.getxSepalPoint() + fullPoint.getxSepalPoint());
+                newCentroid.setySepalPoint(newCentroid.getySepalPoint() + fullPoint.getySepalPoint());
+                newCentroid.setxPetalPoint(newCentroid.getxPetalPoint() + fullPoint.getxPetalPoint());
+                newCentroid.setyPetalPoint(newCentroid.getyPetalPoint() + fullPoint.getyPetalPoint());
+
+            });
+            newCentroid.setxSepalPoint(Double.parseDouble(df.format(newCentroid.getxSepalPoint() / (double) previousClusterData.get(centroid).size())));
+            newCentroid.setySepalPoint(Double.parseDouble(df.format(newCentroid.getySepalPoint() / (double) previousClusterData.get(centroid).size())));
+            newCentroid.setxPetalPoint(Double.parseDouble(df.format(newCentroid.getxPetalPoint() / (double) previousClusterData.get(centroid).size())));
+            newCentroid.setyPetalPoint(Double.parseDouble(df.format(newCentroid.getyPetalPoint() / (double) previousClusterData.get(centroid).size())));
+            newCentroids.put(newCentroid, new ArrayList<FullPoint>());
+        }
+
+
+        for (FullPoint item : vals) {
+            Double minDistance = 1000.0;
+            FullPoint bestCentroidForItem = new FullPoint();
+            for (FullPoint centroid : newCentroids.keySet()) {
+                Double actualDistance = calculateEuclidanDistanceFor4D(item.getxSepalPoint(), item.getySepalPoint(), item.getxPetalPoint(), item.getyPetalPoint()
+                        , centroid.getxSepalPoint(), centroid.getySepalPoint(), centroid.getxPetalPoint(), centroid.getyPetalPoint());
+                if (actualDistance < minDistance) {
+                    minDistance = actualDistance;
+                    bestCentroidForItem = centroid;
+                }
+            }
+
+            List<FullPoint> actualClusterForNearestCentroid = new ArrayList<>();
+            if (newCentroids.get(bestCentroidForItem) != null) {
+                actualClusterForNearestCentroid = newCentroids.get(bestCentroidForItem);
+            }
+            actualClusterForNearestCentroid.add(item);
+            newCentroids.put(bestCentroidForItem, actualClusterForNearestCentroid);
+        }
+
+
+        return newCentroids;
+    }
+
+    private static HashMap<FullPoint, List<FullPoint>> setKMeans(int numberOfCentroids, List<FullPoint> vals) {
+        List<FullPoint> actualCentroids = new ArrayList<>();
+        DecimalFormat df = new DecimalFormat("#.#");
+        HashMap<FullPoint, List<FullPoint>> clusterMap = new HashMap<>();
+        for (int i = 0; i < numberOfCentroids; i++) {
+            actualCentroids.add(vals.get((int) (Math.random() * vals.size())));
+        }
+
+        for (FullPoint fp : actualCentroids) {
+            clusterMap.put(fp, new ArrayList<>());
+        }
+
+        for (FullPoint item : vals) {
+            Double minDistance = 1000.0;
+            FullPoint bestCentroidForItem = new FullPoint();
+            for (FullPoint centroid : clusterMap.keySet()) {
+                Double actualDistance = calculateEuclidanDistanceFor4D(item.getxSepalPoint(), item.getySepalPoint(), item.getxPetalPoint(), item.getyPetalPoint()
+                                                                    , centroid.getxSepalPoint(), centroid.getySepalPoint(), centroid.getxPetalPoint(), centroid.getyPetalPoint());
+                if (actualDistance < minDistance) {
+                    minDistance = actualDistance;
+                    bestCentroidForItem = centroid;
+                }
+            }
+
+            List<FullPoint> actualClusterForNearestCentroid = new ArrayList<>();
+            if (clusterMap.get(bestCentroidForItem) != null) {
+                actualClusterForNearestCentroid = clusterMap.get(bestCentroidForItem);
+            }
+            actualClusterForNearestCentroid.add(item);
+            clusterMap.put(bestCentroidForItem, actualClusterForNearestCentroid);
+        }
+
+
+        return clusterMap;
     }
 
     private static XYChart createChart(String title, List<Double> xVals, List<Double> yVals) {
@@ -478,40 +531,6 @@ public class Main {
             return empiricDistanceDistribution;
         }
         return freqMap;
-    }
-
-    private static TreeMap<List<Double>, Double> calcEmpiricDistributionOfDistanceOfAll(List<Double> xSepalData, List<Double> ySepalData, List<Double> xPetalData, List<Double> yPetalData) {
-
-
-        DecimalFormat df = new DecimalFormat("#.#");
-        TreeMap<List<Double>, Double> freqMap = new TreeMap<List<Double>, Double>();
-        List<List<Double>> vals = new ArrayList<>();
-        for (int i = 0; i < xSepalData.size(); i++) {
-            Double sepX = xSepalData.get(i);
-            Double sepY = ySepalData.get(i);
-            Double petX = xPetalData.get(i);
-            Double petY = yPetalData.get(i);
-            List<Double> actArrList = new ArrayList<>();
-            actArrList.add(sepX);
-            actArrList.add(sepY);
-            actArrList.add(petX);
-            actArrList.add(petY);
-            vals.add(actArrList);
-        }
-        for (int i = 0; i < vals.size(); i++) {
-            if (!freqMap.containsKey(vals.get(i))) {
-                freqMap.put(vals.get(i), 0.0);
-            }
-            freqMap.put(vals.get(i), freqMap.get(vals.get(i)) + 1.0);
-        }
-
-        TreeMap<List<Double>, Double> empiricDistanceDistribution = new TreeMap<>();
-        for (int i = 0; i < vals.size(); i++) {
-        }
-        for (Map.Entry<List<Double>, Double> m : freqMap.entrySet()) {
-            empiricDistanceDistribution.put(m.getKey(), (m.getValue() / (double) vals.size()));
-        }
-        return empiricDistanceDistribution;
     }
 
 
