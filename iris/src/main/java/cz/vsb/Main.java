@@ -322,7 +322,7 @@ public class Main {
 
 
         for (int j = 0; j < 5; j++) {
-            HashMap<FullPoint, List<FullPoint>> kk = setKMeans(3, vals);
+            HashMap<FullPoint, List<FullPoint>> kk = setKMeans(4, vals);
             HashMap<FullPoint, List<FullPoint>> newCentroids = calculateNewCentroids(kk, vals);
             int it = 0;
             while (true) {
@@ -338,7 +338,15 @@ public class Main {
             System.out.println("ite: " + it);
         }
 
+
         List<Double[]> sseResults =  calculateSSE(mapOfClusterMaps);
+        for (int j = 0; j < sseResults.size(); j++) {
+            double sse = 0;
+            for (Double v:sseResults.get(j)) {
+                sse+=v;
+            }
+            System.out.println("SSE for run "+j+" was "+sse);
+        }
     }
 
     private static List<Double[]> calculateSSE(List<HashMap<FullPoint, List<FullPoint>>> listOfclusterMaps) {
