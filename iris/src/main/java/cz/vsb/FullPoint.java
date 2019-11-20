@@ -93,4 +93,15 @@ public class FullPoint implements Comparable<FullPoint> {
           }
         return  1;
     }
+
+    @Override
+    public String toString() {
+        return "FullPoint{" +
+                "xSepalPoint=" + xSepalPoint +
+                ", ySepalPoint=" + ySepalPoint +
+                ", xPetalPoint=" + xPetalPoint +
+                ", yPetalPoint=" + yPetalPoint +
+                ", classname='" + classname + '\'' +
+                '}';
+    }
 }

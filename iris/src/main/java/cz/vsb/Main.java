@@ -336,12 +336,13 @@ public class Main {
                 newCentroids = calculateNewCentroids(newCentroids, vals);
                 it++;
             }
-            System.out.println("ite: " + it);
+//            System.out.println("ite: " + it);
         }
 
         List<Double[]> sseResults = calculateSSE(mapOfClusterMaps);
-        String classNameRow = setClassNameForRow(new FullPoint(6.7,3.1,5.6,2.4),vals,5);
-        System.out.println(classNameRow);
+        FullPoint pointToset = new FullPoint(6.7,3.1,5.6,2.4);
+        String classNameRow = setClassNameForRow(pointToset,vals,12);
+        System.out.println("For point "  + pointToset.toString() +" className has been found :"+ classNameRow);
     }
 
     private static String setClassNameForRow(FullPoint row, List<FullPoint> dataSet, int kFold) {
@@ -399,6 +400,11 @@ public class Main {
                 maxOcurenceString = className;
             }
         }
+        System.out.print("Nearest neighbors classnames: ");
+        for (FullPoint fp:nearestNeighbors) {
+            System.out.print(" "+fp.getClassname()+" ");
+        }
+        System.out.println();
         return maxOcurenceString;
     }
 
