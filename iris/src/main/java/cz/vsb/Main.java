@@ -62,6 +62,7 @@ public class Main {
 
         List<Double> xPetalData = new LinkedList<Double>();
         List<Double> yPetalData = new LinkedList<Double>();
+        List<String> classNameData = new LinkedList<String>();
 
 
         int i = 0;
@@ -70,13 +71,14 @@ public class Main {
             for (String rA : r) {
                 if (k == 0) {
                     xSepalData.add(Double.parseDouble(rA.trim().replace(",", ".")));
-
                 } else if (k == 1) {
                     ySepalData.add(Double.parseDouble(rA.trim().replace(",", ".")));
                 } else if (k == 2) {
                     xPetalData.add(Double.parseDouble(rA.trim().replace(",", ".")));
                 } else if (k == 3) {
                     yPetalData.add(Double.parseDouble(rA.trim().replace(",", ".")));
+                } else if (k == 4) {
+                    classNameData.add(rA);
                 }
                 k++;
             }
@@ -311,14 +313,13 @@ public class Main {
             Double sepY = ySepalData.get(n);
             Double petX = xPetalData.get(n);
             Double petY = yPetalData.get(n);
-            FullPoint fp = new FullPoint(sepX, sepY, petX, petY);
+            String className = classNameData.get(n);
+            FullPoint fp = new FullPoint(sepX, sepY, petX, petY, className);
 
             vals.add(fp);
         }
 
         List<HashMap<FullPoint, List<FullPoint>>> mapOfClusterMaps = new ArrayList<>();
-
-
 
 
         for (int j = 0; j < 5; j++) {
@@ -338,11 +339,71 @@ public class Main {
             System.out.println("ite: " + it);
         }
 
-        List<Double[]> sseResults =  calculateSSE(mapOfClusterMaps);
+        List<Double[]> sseResults = calculateSSE(mapOfClusterMaps);
+        String classNameRow = setClassNameForRow(new FullPoint(6.7,3.1,5.6,2.4),vals,5);
+        System.out.println(classNameRow);
+    }
+
+    private static String setClassNameForRow(FullPoint row, List<FullPoint> dataSet, int kFold) {
+        HashMap<FullPoint, Double> distanceForNearestNeighbors = new HashMap<>();
+        for (FullPoint fp : dataSet) {
+            distanceForNearestNeighbors.put(fp, calculateEuclidanDistanceFor4D(row.getxSepalPoint(), row.getySepalPoint(), row.getxPetalPoint(), row.getyPetalPoint(), fp.getxSepalPoint(), fp.getySepalPoint(), fp.getxPetalPoint(), fp.getyPetalPoint()));
+        }
+
+        List<FullPoint> nearestNeighbors = new ArrayList<>();
+        for (int i = 0; i < kFold; i++) {
+            double min = Double.MAX_VALUE;
+            FullPoint minFP = new FullPoint();
+            for (FullPoint fp : distanceForNearestNeighbors.keySet()) {
+                if (distanceForNearestNeighbors.get(fp) < min) {
+                    min = distanceForNearestNeighbors.get(fp);
+                    minFP = fp;
+
+                }
+            }
+            nearestNeighbors.add(minFP);
+            distanceForNearestNeighbors.remove(minFP);
+
+        }
+        return findMostFamiliarClassNameInNeighborhood(nearestNeighbors);
+
+    }
+
+    private static String findMostFamiliarClassNameInNeighborhood(List<FullPoint> nearestNeighbors) {
+        final String Setosa = "Setosa";
+        final String Versicolor = "Versicolor";
+        final String Virginica = "Virginica";
+        HashMap<String, Integer> occurencesOfClassNames = new HashMap<>();
+        occurencesOfClassNames.put(Setosa, 0);
+        occurencesOfClassNames.put(Versicolor, 0);
+        occurencesOfClassNames.put(Virginica, 0);
+
+        for (FullPoint fp : nearestNeighbors) {
+            switch (fp.getClassname()) {
+                case Setosa:
+                    occurencesOfClassNames.put(Setosa, occurencesOfClassNames.get(Setosa) + 1);
+                    break;
+                case Versicolor:
+                    occurencesOfClassNames.put(Versicolor, occurencesOfClassNames.get(Versicolor) + 1);
+                    break;
+                case Virginica:
+                    occurencesOfClassNames.put(Virginica, occurencesOfClassNames.get(Virginica) + 1);
+                    break;
+            }
+        }
+        int maxOccurences = 0;
+        String maxOcurenceString = "";
+        for (String className : occurencesOfClassNames.keySet()) {
+            if (occurencesOfClassNames.get(className) > maxOccurences) {
+                maxOccurences = occurencesOfClassNames.get(className);
+                maxOcurenceString = className;
+            }
+        }
+        return maxOcurenceString;
     }
 
     private static List<Double[]> calculateSSE(List<HashMap<FullPoint, List<FullPoint>>> listOfclusterMaps) {
-        List<Double[]>  listOfSSEValuesOfEachCluster = new ArrayList<>();
+        List<Double[]> listOfSSEValuesOfEachCluster = new ArrayList<>();
         for (HashMap<FullPoint, List<FullPoint>> clusterMap : listOfclusterMaps) {
             Double[] ssesOfClustersOfCurrentMap = calculateSumOfTheSquaresOfTheDistancesOfEachPointFromTheCentroid(clusterMap);
             listOfSSEValuesOfEachCluster.add(ssesOfClustersOfCurrentMap);
@@ -430,7 +491,7 @@ public class Main {
             FullPoint bestCentroidForItem = new FullPoint();
             for (FullPoint centroid : clusterMap.keySet()) {
                 Double actualDistance = calculateEuclidanDistanceFor4D(item.getxSepalPoint(), item.getySepalPoint(), item.getxPetalPoint(), item.getyPetalPoint()
-                                                                    , centroid.getxSepalPoint(), centroid.getySepalPoint(), centroid.getxPetalPoint(), centroid.getyPetalPoint());
+                        , centroid.getxSepalPoint(), centroid.getySepalPoint(), centroid.getxPetalPoint(), centroid.getyPetalPoint());
                 if (actualDistance < minDistance) {
                     minDistance = actualDistance;
                     bestCentroidForItem = centroid;
