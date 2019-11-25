@@ -338,12 +338,98 @@ public class Main {
             }
 //            System.out.println("ite: " + it);
         }
-
         List<Double[]> sseResults = calculateSSE(mapOfClusterMaps);
-        FullPoint pointToset = new FullPoint(6.7,3.1,5.6,2.4);
-        String classNameRow = setClassNameForRow(pointToset,vals,12);
-        System.out.println("For point "  + pointToset.toString() +" className has been found :"+ classNameRow);
+
+
+//        FullPoint pointToset = new FullPoint(6.7, 3.1, 5.6, 2.4);
+//        String classNameRow = setClassNameForRow(pointToset, vals, 12);
+//        System.out.println("For point " + pointToset.toString() + " className has been found :" + classNameRow);
+        int kFold = 4;
+        List<List<FullPoint>> splitSetToFolds = splitSetToFolds(vals, kFold);
+        List<List<List<FullPoint>>> classifiedCrossKFolds = new ArrayList<>();
+        for (int j = 0; j < kFold; j++) {
+
+            List<List<FullPoint>> classifiedCrossKFoldsOfIteration = new ArrayList<>();
+            for (int k = 0; k < splitSetToFolds.size(); k++) {
+                if (j != k) {
+                    List<FullPoint> classifiedSubList = new ArrayList<>();
+                    for (FullPoint fp : splitSetToFolds.get(k)) {
+                        classifiedSubList.add(new FullPoint(fp, setClassNameForRow(fp, splitSetToFolds.get(j), 5)));
+                    }
+                    classifiedCrossKFoldsOfIteration.add(classifiedSubList);
+                } else {
+                    classifiedCrossKFoldsOfIteration.add(splitSetToFolds.get(k));
+                }
+            }
+            classifiedCrossKFolds.add(classifiedCrossKFoldsOfIteration);
+        }
+
+        List<Double> expectedAccuracyOfRuns = new ArrayList<>();
+        for (int j = 0; j < kFold; j++) {
+            double expectedValue = 0.0;
+            double expectedVariance = 0.0;
+            for (int k = 0; k < classifiedCrossKFolds.get(j).size(); k++) {
+                expectedValue += calcAccuracyScore(splitSetToFolds.get(k), classifiedCrossKFolds.get(j).get(k));
+//                System.out.println("Ite: " + j + " is acc score : " + calcAccuracyScore(splitSetToFolds.get(j), classifiedCrossKFolds.get(j)));
+            } System.out.println("For run: "+j+" Expected accuracy value of alg is: " + expectedValue / kFold);
+                expectedAccuracyOfRuns.add(expectedValue / kFold);
+//            System.out.println("Ite: "+ j +" is acc score : " );
+
+        }
+        System.out.println();
+        List<Double> expectedVarianceOfRuns = new ArrayList<>();
+        for (int j = 0; j < kFold; j++) {
+            double expectedValue = 0.0;
+            double expectedVariance = 0.0;
+            for (int k = 0; k < classifiedCrossKFolds.get(j).size(); k++) {
+                expectedValue += calcAccuracyScore(splitSetToFolds.get(k), classifiedCrossKFolds.get(j).get(k));
+                expectedVariance += calcVariance(calcAccuracyScore(splitSetToFolds.get(k), classifiedCrossKFolds.get(j).get(k)),expectedAccuracyOfRuns.get(j))/kFold;
+//                System.out.println("Ite: " + j + " is acc score : " + calcAccuracyScore(splitSetToFolds.get(j), classifiedCrossKFolds.get(j)));
+            } System.out.println("For run: "+j+" Expected variance value of alg is: " + expectedVariance);
+            expectedVarianceOfRuns.add(expectedVariance);
+//            System.out.println("Ite: "+ j +" is acc score : " );
+
+        }
+        System.out.println("Total accuracy value of alg is: "+ expectedAccuracyOfRuns.stream().mapToDouble(aDouble ->aDouble ).sum()/kFold);
+        System.out.println("Total variance value of alg is: "+ expectedVarianceOfRuns.stream().mapToDouble(aDouble ->aDouble ).sum()/kFold);
+
     }
+
+    private static double calcVariance(double calcAccuracyScore,double expectedAcurracyOfRun){
+        return Math.pow(calcAccuracyScore-expectedAcurracyOfRun,2);
+    }
+    private static double calcAccuracyScore(List<FullPoint> pred, List<FullPoint> res) {
+        int correctClassificationNumber = 0;
+        if (pred.size() == res.size()) {
+            for (int i = 0; i < pred.size(); i++) {
+                if (pred.get(i).getClassname().equals(res.get(i).getClassname())) {
+                    correctClassificationNumber++;
+                }
+            }
+        }
+        return (double) correctClassificationNumber / pred.size();
+    }
+
+    private static List<List<FullPoint>> splitSetToFolds(List<FullPoint> dataSet, int kFold) {
+        List<List<FullPoint>> splitData = new ArrayList<>();
+        Collections.shuffle(dataSet);
+        int chunkSize = (int) dataSet.size() / kFold;
+        for (int i = 0; i < kFold; i++) {
+            if (i + 1 == kFold) {
+                splitData.add(dataSet.subList(i * chunkSize, i * chunkSize + chunkSize + dataSet.size() - kFold * chunkSize));
+            } else {
+                splitData.add(dataSet.subList(i * chunkSize, i * chunkSize + chunkSize));
+
+            }
+        }
+//        List<FullPoint> leftPoints =  splitData.get(kFold-1);
+//        leftPoints.addAll(dataSet.subList(chunkSize*kFold,dataSet.size()));
+//        splitData.remove(kFold-1);
+//        splitData.add(leftPoints);
+
+        return splitData;
+    }
+
 
     private static String setClassNameForRow(FullPoint row, List<FullPoint> dataSet, int kFold) {
         HashMap<FullPoint, Double> distanceForNearestNeighbors = new HashMap<>();
@@ -400,11 +486,11 @@ public class Main {
                 maxOcurenceString = className;
             }
         }
-        System.out.print("Nearest neighbors classnames: ");
-        for (FullPoint fp:nearestNeighbors) {
-            System.out.print(" "+fp.getClassname()+" ");
-        }
-        System.out.println();
+//        System.out.print("Nearest neighbors classnames: ");
+//        for (FullPoint fp : nearestNeighbors) {
+//            System.out.print(" " + fp.getClassname() + " ");
+//        }
+//        System.out.println();
         return maxOcurenceString;
     }
 

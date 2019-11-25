@@ -16,6 +16,13 @@ public class FullPoint implements Comparable<FullPoint> {
     public void setClassname(String classname) {
         this.classname = classname;
     }
+    public FullPoint(FullPoint oldFullPoint,String classname){
+        this.xSepalPoint = oldFullPoint.getxSepalPoint();
+        this.ySepalPoint = oldFullPoint.getySepalPoint();
+        this.xPetalPoint = oldFullPoint.getxPetalPoint();
+        this.yPetalPoint = oldFullPoint.getyPetalPoint();
+        this.classname = classname;
+    }
 
     public FullPoint(Double xSepalPoint, Double ySepalPoint, Double xPetalPoint, Double yPetalPoint, String classname) {
         this.xSepalPoint = xSepalPoint;
