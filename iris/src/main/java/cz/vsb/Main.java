@@ -340,96 +340,117 @@ public class Main {
         }
         List<Double[]> sseResults = calculateSSE(mapOfClusterMaps);
 
+//        List<Double[]> sseResults = calculateSSE(mapOfClusterMaps);
+        FullPoint pointToset = new FullPoint(6.7, 3.1, 5.6, 2.4);
+        String classNameRow = setClassNameForRow(pointToset, vals, 12);
+        System.out.println("For point " + pointToset.toString() + " className has been found :" + classNameRow);
 
-//        FullPoint pointToset = new FullPoint(6.7, 3.1, 5.6, 2.4);
-//        String classNameRow = setClassNameForRow(pointToset, vals, 12);
-//        System.out.println("For point " + pointToset.toString() + " className has been found :" + classNameRow);
-        int kFold = 4;
-        List<List<FullPoint>> splitSetToFolds = splitSetToFolds(vals, kFold);
-        List<List<List<FullPoint>>> classifiedCrossKFolds = new ArrayList<>();
-        for (int j = 0; j < kFold; j++) {
-
-            List<List<FullPoint>> classifiedCrossKFoldsOfIteration = new ArrayList<>();
-            for (int k = 0; k < splitSetToFolds.size(); k++) {
-                if (j != k) {
-                    List<FullPoint> classifiedSubList = new ArrayList<>();
-                    for (FullPoint fp : splitSetToFolds.get(k)) {
-                        classifiedSubList.add(new FullPoint(fp, setClassNameForRow(fp, splitSetToFolds.get(j), 5)));
-                    }
-                    classifiedCrossKFoldsOfIteration.add(classifiedSubList);
-                } else {
-                    classifiedCrossKFoldsOfIteration.add(splitSetToFolds.get(k));
-                }
-            }
-            classifiedCrossKFolds.add(classifiedCrossKFoldsOfIteration);
-        }
-
-        List<Double> expectedAccuracyOfRuns = new ArrayList<>();
-        for (int j = 0; j < kFold; j++) {
-            double expectedValue = 0.0;
-            double expectedVariance = 0.0;
-            for (int k = 0; k < classifiedCrossKFolds.get(j).size(); k++) {
-                expectedValue += calcAccuracyScore(splitSetToFolds.get(k), classifiedCrossKFolds.get(j).get(k));
-//                System.out.println("Ite: " + j + " is acc score : " + calcAccuracyScore(splitSetToFolds.get(j), classifiedCrossKFolds.get(j)));
-            } System.out.println("For run: "+j+" Expected accuracy value of alg is: " + expectedValue / kFold);
-                expectedAccuracyOfRuns.add(expectedValue / kFold);
-//            System.out.println("Ite: "+ j +" is acc score : " );
-
-        }
-        System.out.println();
-        List<Double> expectedVarianceOfRuns = new ArrayList<>();
-        for (int j = 0; j < kFold; j++) {
-            double expectedValue = 0.0;
-            double expectedVariance = 0.0;
-            for (int k = 0; k < classifiedCrossKFolds.get(j).size(); k++) {
-                expectedValue += calcAccuracyScore(splitSetToFolds.get(k), classifiedCrossKFolds.get(j).get(k));
-                expectedVariance += calcVariance(calcAccuracyScore(splitSetToFolds.get(k), classifiedCrossKFolds.get(j).get(k)),expectedAccuracyOfRuns.get(j))/kFold;
-//                System.out.println("Ite: " + j + " is acc score : " + calcAccuracyScore(splitSetToFolds.get(j), classifiedCrossKFolds.get(j)));
-            } System.out.println("For run: "+j+" Expected variance value of alg is: " + expectedVariance);
-            expectedVarianceOfRuns.add(expectedVariance);
-//            System.out.println("Ite: "+ j +" is acc score : " );
-
-        }
-        System.out.println("Total accuracy value of alg is: "+ expectedAccuracyOfRuns.stream().mapToDouble(aDouble ->aDouble ).sum()/kFold);
-        System.out.println("Total variance value of alg is: "+ expectedVarianceOfRuns.stream().mapToDouble(aDouble ->aDouble ).sum()/kFold);
-
+        double[][] matrixArray = calculateMatrix(vals);
+        System.out.println(matrixArray);
+        HashMap<Integer, Integer[]> nearestN = findKNearestNeighborsForDataSet(matrixArray, 10);
+        System.out.println(nearestN);
+        HashMap<Integer, Integer[]> epsilonRadius = findEpsilonRadiusForDataSet(matrixArray, 0.4);
+        System.out.println(epsilonRadius);
+        HashMap<Integer, Integer[]> epsilonRadiusAndKNN = findEpsilonRadiusAndKNNForDataSet(matrixArray, 0.4,10);
+        System.out.println(epsilonRadiusAndKNN);
+        writeValuesToFile(epsilonRadius, "epsilonRadius.csv");
+        writeValuesToFile(nearestN, "nearestNeighbors.csv");
+        writeValuesToFile(epsilonRadiusAndKNN, "combination.csv");
     }
 
-    private static double calcVariance(double calcAccuracyScore,double expectedAcurracyOfRun){
-        return Math.pow(calcAccuracyScore-expectedAcurracyOfRun,2);
-    }
-    private static double calcAccuracyScore(List<FullPoint> pred, List<FullPoint> res) {
-        int correctClassificationNumber = 0;
-        if (pred.size() == res.size()) {
-            for (int i = 0; i < pred.size(); i++) {
-                if (pred.get(i).getClassname().equals(res.get(i).getClassname())) {
-                    correctClassificationNumber++;
-                }
+    private static void writeValuesToFile(HashMap<Integer, Integer[]> vals, String fileName) throws IOException {
+        FileWriter writer = new FileWriter(fileName, false);
+        for (int i = 0; i < vals.size(); i++) {
+            for (int j = 0; j < vals.get(i).length; j++) {
+                writer.write(i + ";" + vals.get(i)[j]);
+                writer.write("\r\n");   // write new line
             }
         }
-        return (double) correctClassificationNumber / pred.size();
+        writer.close();
     }
 
-    private static List<List<FullPoint>> splitSetToFolds(List<FullPoint> dataSet, int kFold) {
-        List<List<FullPoint>> splitData = new ArrayList<>();
-        Collections.shuffle(dataSet);
-        int chunkSize = (int) dataSet.size() / kFold;
-        for (int i = 0; i < kFold; i++) {
-            if (i + 1 == kFold) {
-                splitData.add(dataSet.subList(i * chunkSize, i * chunkSize + chunkSize + dataSet.size() - kFold * chunkSize));
+    private static HashMap<Integer, Integer[]> findEpsilonRadiusForDataSet(double[][] matrixArray, double epsilonRadius) {
+        HashMap<Integer, Integer[]> nearestsNeighbors = new HashMap<>();
+        for (int i = 0; i < matrixArray.length; i++) {
+            nearestsNeighbors.put(i, findEpsilonRadius(matrixArray[i], epsilonRadius, i));
+        }
+        return nearestsNeighbors;
+    }
+
+    private static HashMap<Integer, Integer[]> findEpsilonRadiusAndKNNForDataSet(double[][] matrixArray, double epsilonRadius, int k) {
+        HashMap<Integer, Integer[]> nearestsNeighbors = new HashMap<>();
+        for (int i = 0; i < matrixArray.length; i++) {
+            Integer[] radiusNeighbors = findEpsilonRadius(matrixArray[i], epsilonRadius, i);
+            if (radiusNeighbors.length < k) {
+                nearestsNeighbors.put(i, findKNearestNeighbors(matrixArray[i], k, i));
             } else {
-                splitData.add(dataSet.subList(i * chunkSize, i * chunkSize + chunkSize));
-
+                nearestsNeighbors.put(i, findEpsilonRadius(matrixArray[i], epsilonRadius, i));
             }
         }
-//        List<FullPoint> leftPoints =  splitData.get(kFold-1);
-//        leftPoints.addAll(dataSet.subList(chunkSize*kFold,dataSet.size()));
-//        splitData.remove(kFold-1);
-//        splitData.add(leftPoints);
-
-        return splitData;
+        return nearestsNeighbors;
     }
 
+
+    private static Integer[] findEpsilonRadius(double[] row, double epsilonRadius, int rowIndex) {
+        List<Integer> nearestNeighborsByRadius = new ArrayList<>();
+
+        List<Integer> minIndexes = new LinkedList<>();
+
+
+        for (int j = 0; j < row.length; j++) {
+            if (row[j] < epsilonRadius && j != rowIndex) {
+                nearestNeighborsByRadius.add(j);
+            }
+        }
+
+
+        Integer[] example = new Integer[nearestNeighborsByRadius.size()];
+        Integer[] nearestNeighbors = nearestNeighborsByRadius.toArray(example);
+        return nearestNeighbors;
+    }
+
+
+    private static HashMap<Integer, Integer[]> findKNearestNeighborsForDataSet(double[][] matrixArray, int k) {
+        double[][] neigbors = new double[matrixArray.length][k];
+        HashMap<Integer, Integer[]> nearestsNeighbors = new HashMap<>();
+        for (int i = 0; i < matrixArray.length; i++) {
+            nearestsNeighbors.put(i, findKNearestNeighbors(matrixArray[i], k, i));
+        }
+        return nearestsNeighbors;
+    }
+
+    private static Integer[] findKNearestNeighbors(double[] row, int k, int rowIndex) {
+        Integer[] nearestNeighbors = new Integer[k];
+        Integer[] example = new Integer[k];
+        List<Integer> minIndexes = new LinkedList<>();
+        for (int i = 0; i < k; i++) {
+            double min = Double.MAX_VALUE;
+            int minIndex = 0;
+
+
+            for (int j = 0; j < row.length; j++) {
+                if (row[j] < min && !minIndexes.contains(j) && j != rowIndex) {
+                    min = row[j];
+                    minIndex = j;
+                }
+            }
+            minIndexes.add(minIndex);
+        }
+        nearestNeighbors = minIndexes.toArray(example);
+        return nearestNeighbors;
+    }
+
+    private static double[][] calculateMatrix(List<FullPoint> dataSet) {
+        double[][] matrixArray = new double[dataSet.size()][dataSet.size()];
+
+        for (int i = 0; i < dataSet.size(); i++) {
+            for (int j = 0; j < dataSet.size(); j++) {
+                matrixArray[i][j] = calculateEuclidanDistanceFor4D(dataSet.get(i).getxPetalPoint(), dataSet.get(i).getyPetalPoint(), dataSet.get(i).getxSepalPoint(), dataSet.get(i).getyPetalPoint()
+                        , dataSet.get(j).getxPetalPoint(), dataSet.get(j).getyPetalPoint(), dataSet.get(j).getxSepalPoint(), dataSet.get(j).getyPetalPoint());
+            }
+        }
+        return matrixArray;
+    }
 
     private static String setClassNameForRow(FullPoint row, List<FullPoint> dataSet, int kFold) {
         HashMap<FullPoint, Double> distanceForNearestNeighbors = new HashMap<>();
@@ -486,11 +507,11 @@ public class Main {
                 maxOcurenceString = className;
             }
         }
-//        System.out.print("Nearest neighbors classnames: ");
-//        for (FullPoint fp : nearestNeighbors) {
-//            System.out.print(" " + fp.getClassname() + " ");
-//        }
-//        System.out.println();
+        System.out.print("Nearest neighbors classnames: ");
+        for (FullPoint fp : nearestNeighbors) {
+            System.out.print(" " + fp.getClassname() + " ");
+        }
+        System.out.println();
         return maxOcurenceString;
     }
 
